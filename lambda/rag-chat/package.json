@@ -1,0 +1,26 @@
+{
+  "name": "julia-cv-rag-chat",
+  "version": "1.0.0",
+  "description": "RAG-enabled chat Lambda function for Julia's CV assistant",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "rag",
+    "chat",
+    "openai",
+    "embeddings"
+  ],
+  "author": "Julia Baucher",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0",
+    "openai": "^4.67.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "julia-cv-upload-api",
+  "version": "1.0.0",
+  "description": "Lambda function for admin uploads to Julia's CV knowledge base",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "upload",
+    "admin",
+    "s3"
+  ],
+  "author": "Julia Baucher",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1691.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

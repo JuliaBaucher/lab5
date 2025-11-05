@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Julia Baucher - Knowledge Base Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --background: #f9fafb;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --border-focus: #3b82f6;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--background);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .admin-form {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--border-focus);
+    }
+
+    textarea {
+      min-height: 300px;
+      resize: vertical;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    }
+
+    .button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .button:hover {
+      background: var(--primary-hover);
+    }
+
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .button-full {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert-error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .alert-warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fed7aa;
+    }
+
+    .help-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--primary-hover);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .admin-form {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back to CV
+    </a>
+
+    <div class="header">
+      <h1>Knowledge Base Admin</h1>
+      <p>Update Julia's profile information for the AI assistant</p>
+    </div>
+
+    <div id="alert-container"></div>
+
+    <form class="admin-form" id="admin-form">
+      <div class="form-group">
+        <label for="admin-token">Admin Token</label>
+        <input type="password" id="admin-token" name="adminToken" required>
+        <div class="help-text">Enter your admin authentication token</div>
+      </div>
+
+      <div class="form-group">
+        <label for="document-name">Document Name</label>
+        <input type="text" id="document-name" name="documentName" required placeholder="e.g., julia-profile">
+        <div class="help-text">Name for the knowledge base document (without extension)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="content">Content</label>
+        <textarea id="content" name="content" required placeholder="# Julia Baucher Profile
+
+## Professional Experience
+- Senior BI Product Manager at Amazon (2021-2025)
+- Product Manager at Amadeus (2013-2020)
+
+## Skills
+- Python, SQL, Machine Learning
+- Product Management, UX Design
+
+## Education
+- PhD in Computational Mechanics, École des Mines de Paris"></textarea>
+        <div class="help-text">
+          Use Markdown format. Supports # for main sections and ## for subsections.
+        </div>
+      </div>
+
+      <button type="submit" class="button button-full" id="save-button">
+        <span id="button-text">Save Knowledge Base</span>
+        <span id="loading-spinner" class="loading-spinner" style="display: none;"></span>
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // Configuration - Replace with your actual Upload API Gateway URL
+    const UPLOAD_API_URL = 'https://your-upload-api-gateway-id.execute-api.eu-north-1.amazonaws.com/prod/upload';
+    
+    // DOM elements
+    const form = document.getElementById('admin-form');
+    const alertContainer = document.getElementById('alert-container');
+    const saveButton = document.getElementById('save-button');
+    const buttonText = document.getElementById('button-text');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    // Show alert message
+    function showAlert(message, type = 'success') {
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.textContent = message;
+      
+      alertContainer.innerHTML = '';
+      alertContainer.appendChild(alert);
+      
+      // Auto-hide success messages after 5 seconds
+      if (type === 'success') {
+        setTimeout(() => {
+          alert.remove();
+        }, 5000);
+      }
+      
+      // Scroll to top to show alert
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Set loading state
+    function setLoading(loading) {
+      saveButton.disabled = loading;
+      if (loading) {
+        buttonText.textContent = 'Saving...';
+        loadingSpinner.style.display = 'inline-block';
+      } else {
+        buttonText.textContent = 'Save Knowledge Base';
+        loadingSpinner.style.display = 'none';
+      }
+    }
+
+    // Handle form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const adminToken = formData.get('adminToken');
+      const documentName = formData.get('documentName');
+      const content = formData.get('content');
+
+      // Basic validation
+      if (!adminToken.trim()) {
+        showAlert('Admin token is required', 'error');
+        return;
+      }
+
+      if (!documentName.trim()) {
+        showAlert('Document name is required', 'error');
+        return;
+      }
+
+      if (!content.trim()) {
+        showAlert('Content is required', 'error');
+        return;
+      }
+
+      // Validate document name (alphanumeric, hyphens, underscores only)
+      if (!/^[a-zA-Z0-9_-]+$/.test(documentName)) {
+        showAlert('Document name can only contain letters, numbers, hyphens, and underscores', 'error');
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const response = await fetch(UPLOAD_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${adminToken}`
+          },
+          body: JSON.stringify({
+            documentName: documentName.trim(),
+            content: content.trim()
+          })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || `HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        showAlert('Knowledge base updated successfully! The AI assistant will use the new information shortly.', 'success');
+        
+        // Clear the form except for admin token (for convenience)
+        document.getElementById('document-name').value = '';
+        document.getElementById('content').value = '';
+
+      } catch (error) {
+        console.error('Upload error:', error);
+        
+        if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+          showAlert('Invalid admin token. Please check your credentials.', 'error');
+        } else if (error.message.includes('CORS')) {
+          showAlert('Access denied. This page can only be used from the official domain.', 'error');
+        } else if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+          showAlert('Network error. Please check your internet connection and try again.', 'error');
+        } else {
+          showAlert(`Error: ${error.message}`, 'error');
+        }
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // Auto-save admin token to localStorage for convenience (but warn about security)
+    const adminTokenInput = document.getElementById('admin-token');
+    
+    // Load saved token on page load
+    try {
+      const savedToken = localStorage.getItem('admin-token');
+      if (savedToken) {
+        adminTokenInput.value = savedToken;
+        showAlert('Admin token loaded from browser storage. For security, consider clearing it after use.', 'warning');
+      }
+    } catch (e) {
+      // localStorage not available, ignore
+    }
+
+    // Save token when changed
+    adminTokenInput.addEventListener('change', () => {
+      try {
+        if (adminTokenInput.value.trim()) {
+          localStorage.setItem('admin-token', adminTokenInput.value.trim());
+        } else {
+          localStorage.removeItem('admin-token');
+        }
+      } catch (e) {
+        // localStorage not available, ignore
+      }
+    });
+
+    // Show initial help message
+    showAlert('Enter your admin token and document content to update the knowledge base. Changes will be reflected in the AI assistant within a few minutes.', 'warning');
+  </script>
+</body>
+</html>
