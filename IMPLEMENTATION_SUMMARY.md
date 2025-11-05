@@ -47,7 +47,7 @@ This implementation adds a complete RAG (Retrieval-Augmented Generation) system 
 ### 4. Comprehensive Documentation
 
 #### Setup and Deployment
-- **`docs/aws-setup.md`**: Complete AWS infrastructure setup guide
+- **`docs/aws-setup.md`**: Complete AWS infrastructure setup guide (no local setup required)
 - **`docs/deployment-checklist.md`**: Step-by-step deployment validation
 - **Updated `README.md`**: Project overview and usage instructions
 
@@ -84,7 +84,7 @@ OpenAI GPT-4o-mini (Response Generation)
 ## 🚀 Key Features Delivered
 
 ### For Julia (Admin User)
-- ✅ **No local setup required** - everything works through web interface
+- ✅ **No local setup required** - everything works through web interface and AWS Console
 - ✅ **No code redeployment needed** - content updates are automatic
 - ✅ **Simple web form** for content management
 - ✅ **Immediate feedback** on upload success/failure
@@ -110,8 +110,8 @@ OpenAI GPT-4o-mini (Response Generation)
 Following the detailed guide in `docs/aws-setup.md`:
 
 1. **Create S3 bucket** `juliabaucher-cv-kb` with proper security settings
-2. **Set up IAM roles** with least-privilege permissions
-3. **Deploy Lambda functions** with correct environment variables
+2. **Set up IAM roles** with least-privilege permissions (including existing role `JuliaBaucher_CV-backend-RAG-role-mni8m304`)
+3. **Deploy Lambda functions** directly via AWS Console with correct environment variables
 4. **Configure API Gateway** for the upload API
 5. **Set up S3 triggers** for automatic embedding generation
 
@@ -123,7 +123,7 @@ Following the detailed guide in `docs/aws-setup.md`:
 3. **Verify CORS settings** match the deployed domain
 
 ### 3. Initial Content Upload
-1. **Upload sample knowledge base files** to trigger embedding generation
+1. **Upload sample knowledge base files** via AWS Console or admin interface to trigger embedding generation
 2. **Test the complete pipeline** from upload to chat responses
 3. **Verify embeddings** are generated correctly
 
@@ -195,7 +195,7 @@ Once deployed, test the chatbot with these questions:
 
 ## 🎉 Success Criteria Met
 
-✅ **No local setup required** - Everything works through web interfaces  
+✅ **No local setup required** - Everything works through web interfaces and AWS Console  
 ✅ **No code redeployment needed** - Content updates are automatic  
 ✅ **Secure admin access** - Token-based authentication  
 ✅ **RAG-enhanced responses** - Chatbot uses actual knowledge base  

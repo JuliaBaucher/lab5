@@ -97,13 +97,13 @@ Website Chatbot → RAG Chat Lambda ←────┘
    Update API endpoints in `admin.html` with your actual AWS API Gateway URLs
 
 4. **Upload Initial Content**
-   Use the admin interface or AWS CLI to upload knowledge base content
+   Use the admin interface or AWS Console to upload knowledge base content
 
 ### Detailed Setup
 See [`docs/aws-setup.md`](docs/aws-setup.md) for comprehensive deployment instructions including:
 - S3 bucket configuration
 - IAM roles and policies
-- Lambda function deployment
+- Lambda function deployment via AWS Console
 - API Gateway setup
 - Security configuration
 

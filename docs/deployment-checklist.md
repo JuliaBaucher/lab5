@@ -6,13 +6,12 @@ Use this checklist to ensure all components are properly deployed and configured
 
 ### AWS Account Preparation
 - [ ] AWS Account with appropriate permissions
-- [ ] AWS CLI installed and configured
+- [ ] AWS CLI installed and configured (optional - can use AWS Console)
 - [ ] OpenAI API key obtained
 - [ ] Admin token generated (strong, random string)
 
 ### Repository Setup
-- [ ] Code repository cloned locally
-- [ ] All Lambda function dependencies reviewed
+- [ ] All Lambda function code reviewed in AWS Console
 - [ ] API endpoints identified for configuration
 
 ## ✅ S3 Bucket Configuration
@@ -46,7 +45,7 @@ Use this checklist to ensure all components are properly deployed and configured
   - [ ] S3 PutObject on `kb/raw/*`
 
 ### RAG Chat Lambda Role
-- [ ] Role `RAGChatLambdaRole` created
+- [ ] Role `JuliaBaucher_CV-backend-RAG-role-mni8m304` created
 - [ ] Trust policy configured for Lambda service
 - [ ] Permissions policy allows:
   - [ ] CloudWatch Logs access
@@ -61,8 +60,8 @@ Use this checklist to ensure all components are properly deployed and configured
 - [ ] Timeout: 5 minutes (300 seconds)
 - [ ] Memory: 512 MB
 - [ ] Environment variable `OPENAI_API_KEY` set
-- [ ] Code deployed from `lambda/embedding-builder/`
-- [ ] Dependencies installed (`npm install`)
+- [ ] Code deployed directly in AWS Console from `lambda/embedding-builder/`
+- [ ] Dependencies managed through AWS Console
 - [ ] S3 trigger configured:
   - [ ] Event: `s3:ObjectCreated:*`
   - [ ] Bucket: `juliabaucher-cv-kb`
@@ -76,18 +75,18 @@ Use this checklist to ensure all components are properly deployed and configured
 - [ ] Timeout: 30 seconds
 - [ ] Memory: 256 MB
 - [ ] Environment variable `ADMIN_TOKEN` set
-- [ ] Code deployed from `lambda/upload-api/`
-- [ ] Dependencies installed (`npm install`)
+- [ ] Code deployed directly in AWS Console from `lambda/upload-api/`
+- [ ] Dependencies managed through AWS Console
 
 ### RAG Chat Lambda
 - [ ] Existing function `JuliaBaucher_CV-backend-RAG` updated
 - [ ] Runtime: Node.js 18.x
-- [ ] Role: `RAGChatLambdaRole`
+- [ ] Role: `JuliaBaucher_CV-backend-RAG-role-mni8m304`
 - [ ] Timeout: 30 seconds
 - [ ] Memory: 512 MB
 - [ ] Environment variable `OPENAI_API_KEY` set
-- [ ] Code deployed from `lambda/rag-chat/`
-- [ ] Dependencies installed (`npm install`)
+- [ ] Code deployed directly in AWS Console from `lambda/rag-chat/`
+- [ ] Dependencies managed through AWS Console
 
 ## ✅ API Gateway Configuration
 
@@ -123,7 +122,7 @@ Use this checklist to ensure all components are properly deployed and configured
 ## ✅ Testing and Validation
 
 ### Initial Content Upload
-- [ ] Sample content uploaded via AWS CLI or admin interface
+- [ ] Sample content uploaded via AWS Console or admin interface
 - [ ] Embedding generation triggered automatically
 - [ ] Embeddings file created in `kb/embeddings/`
 - [ ] CloudWatch logs show successful processing
@@ -198,7 +197,7 @@ Use this checklist to ensure all components are properly deployed and configured
 
 ### Backup and Recovery
 - [ ] S3 versioning enabled for knowledge base files
-- [ ] Lambda function code backed up in repository
+- [ ] Lambda function code backed up in AWS Console
 - [ ] Environment variables documented securely
 - [ ] Recovery procedures documented
 
@@ -244,17 +243,14 @@ Use this checklist to ensure all components are properly deployed and configured
 ### Useful Commands
 
 ```bash
-# Check Lambda logs
-aws logs describe-log-groups --log-group-name-prefix "/aws/lambda/JuliaBaucher"
+# Check Lambda logs (via AWS Console CloudWatch)
+# Navigate to CloudWatch > Log groups > /aws/lambda/JuliaBaucher*
 
-# List S3 contents
-aws s3 ls s3://juliabaucher-cv-kb/kb/ --recursive
+# List S3 contents (via AWS Console S3)
+# Navigate to S3 > juliabaucher-cv-kb > kb/
 
-# Test Lambda function
-aws lambda invoke --function-name JuliaBaucher_CV-upload-api --payload '{}' response.json
-
-# Check API Gateway
-curl -X OPTIONS https://your-api-gateway-url/prod/upload
+# Test Lambda function (via AWS Console Lambda)
+# Navigate to Lambda > Function name > Test tab
 ```
 
 ## ✅ Post-Deployment Tasks
