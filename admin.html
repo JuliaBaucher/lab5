@@ -3,107 +3,185 @@
 <head>
 <meta charset="UTF-8">
 <title>Julia – Knowledge Base Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-    body {
-        font-family: system-ui, sans-serif;
-        background: #111;
-        color: #eee;
-        margin: 0;
-        padding: 40px;
-    }
-    .card {
-        background: #1b1b1b;
-        padding: 20px;
-        border-radius: 8px;
-        max-width: 700px;
-        margin: auto;
-        box-shadow: 0 0 12px rgba(0,0,0,0.6);
-    }
-    label { display:block; margin-top:15px; font-weight:600; }
-    input, textarea {
-        width: 100%;
-        padding: 10px;
-        margin-top:5px;
-        border-radius:4px;
-        border:1px solid #444;
-        background:#222;
-        color:#fff;
-        font-size:15px;
-    }
-    button {
-        margin-top: 20px;
-        padding: 12px 20px;
-        background:#3b82f6;
-        border: none;
-        border-radius:6px;
-        color: #fff;
-        cursor:pointer;
-        font-size:16px;
-    }
-    button:hover { background:#2563eb; }
+  body {
+    font-family: system-ui, sans-serif;
+    background: #111;
+    color: #eee;
+    margin: 0;
+    padding: 40px;
+  }
+  .card {
+    background: #1b1b1b;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 700px;
+    margin: auto;
+    box-shadow: 0 0 12px rgba(0,0,0,0.6);
+  }
+  h2 { margin-top: 0; }
+  label { display:block; margin-top:15px; font-weight:600; }
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top:5px;
+    border-radius:4px;
+    border:1px solid #444;
+    background:#222;
+    color:#fff;
+    font-size:15px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+  }
+  .inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #bbb;
+  }
+  button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background:#3b82f6;
+    border: none;
+    border-radius:6px;
+    color: #fff;
+    cursor:pointer;
+    font-size:16px;
+  }
+  button:hover { background:#2563eb; }
+  .ghost {
+    background: transparent;
+    border: 1px solid #444;
+    color: #ddd;
+    margin-left: 10px;
+  }
+  .ghost:hover { background:#1f2937; }
+  #status { min-height: 24px; }
 </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Knowledge Base Upload</h2>
-    <p>Paste your text below to add it to Julia’s RAG knowledge base.</p>
+  <h2>Knowledge Base Upload</h2>
+  <p>Paste your text below to add it to Julia’s RAG knowledge base.</p>
 
-    <label>File Name (example: <b>julia_background.md</b>)</label>
-    <input id="filename" placeholder="filename.md"/>
+  <label>Admin Token</label>
+  <div class="row">
+    <input id="token" type="password" placeholder="Enter admin token"/>
+    <button class="ghost" type="button" id="toggleVis" aria-label="Show token">Show</button>
+  </div>
+  <div class="inline">
+    <input type="checkbox" id="remember" />
+    <label for="remember" style="margin:0; font-weight:400;">Remember token on this device</label>
+  </div>
 
-    <label>Content (Markdown or plain text)</label>
-    <textarea id="content" rows="15" placeholder="Paste text here..."></textarea>
+  <label>File Name (example: <b>julia_background.md</b>)</label>
+  <input id="filename" placeholder="filename.md"/>
 
+  <label>Content (Markdown or plain text)</label>
+  <textarea id="content" rows="15" placeholder="Paste text here..."></textarea>
+
+  <div>
     <button onclick="save()">Save to Knowledge Base</button>
+    <button class="ghost" type="button" onclick="clearForm()">Clear</button>
+  </div>
 
-    <p id="status"></p>
+  <p id="status"></p>
 </div>
 
 <script>
-const API_URL = "https://b89mn09gd0.execute-api.eu-north-1.amazonaws.com/prod/upload";
-const TOKEN = "Renovation-2024"; // <<-- Admin password
+  // === Config ===
+  const API_URL = "https://b89mn09gd0.execute-api.eu-north-1.amazonaws.com/prod/upload";
 
-async function save() {
-  const filename = document.getElementById("filename").value.trim();
-  const content = document.getElementById("content").value.trim();
-  const status = document.getElementById("status");
+  // Restore saved token if user opted-in earlier
+  (function init() {
+    try {
+      const saved = localStorage.getItem("jb_admin_token");
+      if (saved) {
+        document.getElementById("token").value = saved;
+        document.getElementById("remember").checked = true;
+      }
+    } catch (_) {}
+  })();
 
-  if (!filename || !content) {
-    status.textContent = "⚠️ Please provide both filename and content.";
-    status.style.color = "orange";
-    return;
+  // Show/Hide token
+  document.getElementById("toggleVis").addEventListener("click", () => {
+    const el = document.getElementById("token");
+    const btn = document.getElementById("toggleVis");
+    if (el.type === "password") { el.type = "text"; btn.textContent = "Hide"; }
+    else { el.type = "password"; btn.textContent = "Show"; }
+  });
+
+  function setStatus(text, color) {
+    const status = document.getElementById("status");
+    status.textContent = text;
+    status.style.color = color || "#ddd";
   }
 
-  try {
-    status.textContent = "Uploading...";
-    status.style.color = "#3b82f6";
+  function clearForm() {
+    document.getElementById("filename").value = "";
+    document.getElementById("content").value = "";
+    setStatus("");
+  }
 
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${TOKEN}`
-      },
-      body: JSON.stringify({ name: filename, content })
-    });
+  async function save() {
+    const token = document.getElementById("token").value.trim();
+    const filename = document.getElementById("filename").value.trim();
+    const content = document.getElementById("content").value.trim();
+    const remember = document.getElementById("remember").checked;
 
-    const data = await res.json();
-    if (!res.ok) {
-      status.textContent = "❌ Upload failed: " + (data.error || res.status);
-      status.style.color = "red";
+    if (!token) {
+      setStatus("⚠️ Please enter the admin token.", "orange");
+      return;
+    }
+    if (!filename || !content) {
+      setStatus("⚠️ Please provide both filename and content.", "orange");
       return;
     }
 
-    status.textContent = "✅ Upload successful!";
-    status.style.color = "#22c55e";
+    // Store token locally only if user opted-in
+    try {
+      if (remember) localStorage.setItem("jb_admin_token", token);
+      else localStorage.removeItem("jb_admin_token");
+    } catch (_) {}
 
-  } catch (err) {
-    console.error(err);
-    status.textContent = "❌ Error: " + err.message;
-    status.style.color = "red";
+    try {
+      setStatus("Uploading...", "#3b82f6");
+
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // IMPORTANT: token travels in Authorization header
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ name: filename, content })
+      });
+
+      // Try to parse JSON either way to show nice messages
+      let data = {};
+      try { data = await res.json(); } catch (_) {}
+
+      if (!res.ok) {
+        setStatus("❌ Upload failed: " + (data.error || `${res.status} ${res.statusText}`), "red");
+        return;
+      }
+
+      setStatus("✅ Upload successful! Saved as: " + (data.key || filename), "#22c55e");
+
+    } catch (err) {
+      console.error(err);
+      setStatus("❌ Error: " + err.message, "red");
+    }
   }
-}
 </script>
 
 </body>
