@@ -21,90 +21,121 @@
     box-shadow: 0 0 12px rgba(0,0,0,0.6);
   }
   h2 { margin-top: 0; }
-  label { display:block; margin-top:15px; font-weight:600; }
+  label { 
+    display: block; 
+    margin-top: 15px; 
+    font-weight: 600; 
+  }
   input, textarea {
     width: 100%;
     padding: 10px;
-    margin-top:5px;
-    border-radius:4px;
-    border:1px solid #444;
-    background:#222;
-    color:#fff;
-    font-size:15px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background: #222;
+    color: #fff;
+    font-size: 15px;
     box-sizing: border-box;
   }
 
   /* Admin token row with eye icon inside input */
   .row {
     position: relative;
+    margin-top: 5px;
   }
   #token {
-    padding-right: 40px; /* space for eye icon */
+    padding-right: 45px;
   }
   #toggleVis {
     position: absolute;
-    right: 10px;
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
     color: #aaa;
     cursor: pointer;
-    font-size: 18px;
-    padding: 0;
+    font-size: 20px;
+    padding: 8px;
+    margin: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #toggleVis:hover {
+    color: #fff;
   }
 
   .inline {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.5cm;
     margin-top: 8px;
     font-size: 14px;
     color: #bbb;
-    white-space: nowrap; /* keep checkbox + text on one line */
   }
+  .inline input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+  }
+  .inline label {
+    margin: 0;
+    font-weight: 400;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
   button {
     margin-top: 20px;
     padding: 10px 20px;
-    background:#3b82f6;
+    background: #3b82f6;
     border: none;
-    border-radius:6px;
+    border-radius: 6px;
     color: #fff;
-    cursor:pointer;
-    font-size:16px;
+    cursor: pointer;
+    font-size: 16px;
     box-sizing: border-box;
   }
-  button:hover { background:#2563eb; }
+  button:hover { 
+    background: #2563eb; 
+  }
   .ghost {
     background: transparent;
     border: 1px solid #444;
     color: #ddd;
     margin-left: 10px;
   }
-  .ghost:hover { background:#1f2937; }
-  #status { min-height: 24px; }
+  .ghost:hover { 
+    background: #1f2937; 
+  }
+  #status { 
+    min-height: 24px;
+    margin-top: 15px;
+  }
 </style>
 </head>
 <body>
 
 <div class="card">
   <h2>Knowledge Base Upload</h2>
-  <p>Paste your text below to add it to Julia’s RAG knowledge base.</p>
+  <p>Paste your text below to add it to Julia's RAG knowledge base.</p>
 
-  <label>Admin Token</label>
+  <label for="token">Admin Token</label>
   <div class="row">
     <input id="token" type="password" placeholder="Enter admin token"/>
     <button type="button" id="toggleVis" aria-label="Show token">👁</button>
   </div>
   <div class="inline">
     <input type="checkbox" id="remember" />
-    <label for="remember" style="margin:0; font-weight:400;">Remember token on this device</label>
+    <label for="remember">Remember token on this device</label>
   </div>
 
-  <label>File Name (example: <b>julia_background.md</b>)</label>
+  <label for="filename">File Name (example: <b>julia_background.md</b>)</label>
   <input id="filename" placeholder="filename.md"/>
 
-  <label>Content (Markdown or plain text)</label>
+  <label for="content">Content (Markdown or plain text)</label>
   <textarea id="content" rows="15" placeholder="Paste text here..."></textarea>
 
   <div>
