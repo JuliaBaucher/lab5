@@ -172,14 +172,10 @@ https://juliabaucher.github.io/lab5/
 
 
 
-## 📌 Roadmap / Future Improvements
 
-- Add edit/delete controls in admin UI
-- Add usage analytics / FAQs dashboard
-- Allow PDF uploads with automatic text extraction
-- Add fallback LM summarization for chunked answers
 
 ---
+
 
 
 
