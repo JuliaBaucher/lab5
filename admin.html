@@ -31,30 +31,48 @@
     background:#222;
     color:#fff;
     font-size:15px;
+    box-sizing: border-box;
   }
+
+  /* Admin token row with eye icon inside input */
   .row {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px;
-    align-items: center;
+    position: relative;
   }
+  #token {
+    padding-right: 40px; /* space for eye icon */
+  }
+  #toggleVis {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+  }
+
   .inline {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     margin-top: 8px;
     font-size: 14px;
     color: #bbb;
+    white-space: nowrap; /* keep checkbox + text on one line */
   }
   button {
     margin-top: 20px;
-    padding: 12px 20px;
+    padding: 10px 20px;
     background:#3b82f6;
     border: none;
     border-radius:6px;
     color: #fff;
     cursor:pointer;
     font-size:16px;
+    box-sizing: border-box;
   }
   button:hover { background:#2563eb; }
   .ghost {
@@ -76,7 +94,7 @@
   <label>Admin Token</label>
   <div class="row">
     <input id="token" type="password" placeholder="Enter admin token"/>
-    <button class="ghost" type="button" id="toggleVis" aria-label="Show token">Show</button>
+    <button type="button" id="toggleVis" aria-label="Show token">👁</button>
   </div>
   <div class="inline">
     <input type="checkbox" id="remember" />
@@ -112,12 +130,17 @@
     } catch (_) {}
   })();
 
-  // Show/Hide token
+  // Show/Hide token via eye icon
   document.getElementById("toggleVis").addEventListener("click", () => {
     const el = document.getElementById("token");
     const btn = document.getElementById("toggleVis");
-    if (el.type === "password") { el.type = "text"; btn.textContent = "Hide"; }
-    else { el.type = "password"; btn.textContent = "Show"; }
+    if (el.type === "password") {
+      el.type = "text";
+      btn.textContent = "🙈";
+    } else {
+      el.type = "password";
+      btn.textContent = "👁";
+    }
   });
 
   function setStatus(text, color) {
